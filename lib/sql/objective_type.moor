@@ -1,0 +1,19 @@
+CREATE TABLE objective_type(
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    image TEXT NOT NULL,
+    private BOOLEAN NOT NULL
+) AS ObjectiveType;
+
+@create:
+INSERT INTO objective_type
+VALUES
+    ('phase_1', 'Phase I', 'phase_1_back.png', 0),
+    ('phase_2', 'Phase II', 'phase_2_back.png', 0),
+    ('agenda', 'Agenda', 'agenda_back.jpg', 0),
+    ('secret', 'Secret', 'secret_back.png', 1),
+    ('promissory', 'Promissory', 'promissory_back.png', 0);
+
+listObjectiveType:
+SELECT *
+FROM objective_type;

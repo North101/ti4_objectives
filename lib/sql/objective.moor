@@ -1,0 +1,71 @@
+import 'objective_type.moor';
+
+CREATE TABLE objective(
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    objective_type_id TEXT NOT NULL REFERENCES objective_type(id),
+    value INT NOT NULL,
+    image TEXT NOT NULL,
+    toggle BOOLEAN NOT NULL
+) AS Objective;
+
+@create:
+INSERT INTO objective
+VALUES
+    ('phase_1_01', 'Develop Weaponry', 'phase_1', 1, 'phase_1_01.jpg', 0),
+    ('phase_1_02', 'Corner The Market', 'phase_1', 1, 'phase_1_02.jpg', 0),
+    ('phase_1_03', 'Swap The Council', 'phase_1', 1, 'phase_1_03.jpg', 0),
+    ('phase_1_04', 'Negotiate Trade Routes', 'phase_1', 1, 'phase_1_04.jpg', 0),
+    ('phase_1_05', 'Lead From The Front', 'phase_1', 1, 'phase_1_05.jpg', 0),
+    ('phase_1_06', 'Intimiate Council', 'phase_1', 1, 'phase_1_06.jpg', 0),
+    ('phase_1_07', 'Found Research Outpost', 'phase_1', 1, 'phase_1_07.jpg', 0),
+    ('phase_1_08', 'Expand Borders', 'phase_1', 1, 'phase_1_08.jpg', 0),
+    ('phase_1_09', 'Erect A Monument', 'phase_1', 1, 'phase_1_09.jpg', 0),
+    ('phase_1_10', 'Diversify Research', 'phase_1', 1, 'phase_1_10.jpg', 0),
+    ('phase_2_01', 'Centralize Galatic Trade', 'phase_2', 2, 'phase_2_01.jpg', 0),
+    ('phase_2_02', 'Unify The Colonies', 'phase_2', 2, 'phase_2_02.jpg', 0),
+    ('phase_2_03', 'Subdue The Galaxy', 'phase_2', 2, 'phase_2_03.jpg', 0),
+    ('phase_2_04', 'Revolutionize Warfare', 'phase_2', 2, 'phase_2_04.jpg', 0),
+    ('phase_2_05', 'Master The Sciences', 'phase_2', 2, 'phase_2_05.jpg', 0),
+    ('phase_2_06', 'Manipulate The Law', 'phase_2', 2, 'phase_2_06.jpg', 0),
+    ('phase_2_07', 'Galvanize The People', 'phase_2', 2, 'phase_2_07.jpg', 0),
+    ('phase_2_08', 'Found A Golden Palace', 'phase_2', 2, 'phase_2_08.jpg', 0),
+    ('phase_2_09', 'Form Galatic Brain Trust', 'phase_2', 2, 'phase_2_09.jpg', 0),
+    ('phase_2_10', 'Conquer The Weak', 'phase_2', 2, 'phase_2_10.jpg', 0),
+    ('secret_01', 'Adapt The Strategies', 'secret', 1, 'secret_01.jpg', 0),
+    ('secret_02', 'Unviel Flagship', 'secret', 1, 'secret_02.jpg', 0),
+    ('secret_03', 'Turn Their Fleets To Dust', 'secret', 1, 'secret_03.jpg', 0),
+    ('secret_04', 'Threaten Enemies', 'secret', 1, 'secret_04.jpg', 0),
+    ('secret_05', 'Spark A Rebellion', 'secret', 1, 'secret_05.jpg', 0),
+    ('secret_06', 'Occupy The Seat Of The Empire', 'secret', 1, 'secret_06.jpg', 0),
+    ('secret_07', 'Monopolize Production', 'secret', 1, 'secret_07.jpg', 0),
+    ('secret_08', 'Mine Rare Metals', 'secret', 1, 'secret_08.jpg', 0),
+    ('secret_09', 'Master The Laws Of Physics', 'secret', 1, 'secret_09.jpg', 0),
+    ('secret_10', 'Make An Example Of Their World', 'secret', 1, 'secret_10.jpg', 0),
+    ('secret_11', 'Learn Secrets Of The Cosmos', 'secret', 1, 'secret_11.jpg', 0),
+    ('secret_12', 'Gather A Mighty Fleet', 'secret', 1, 'secret_12.jpg', 0),
+    ('secret_13', 'Fuel The War Machine', 'secret', 1, 'secret_13.jpg', 0),
+    ('secret_14', 'Form A Spy Network', 'secret', 1, 'secret_14.jpg', 0),
+    ('secret_15', 'Forge An Alliance', 'secret', 1, 'secret_15.jpg', 0),
+    ('secret_16', 'Establish A Perimeter', 'secret', 1, 'secret_16.jpg', 0),
+    ('secret_17', 'Destroy Their Greatest Ship', 'secret', 1, 'secret_17.jpg', 0),
+    ('secret_18', 'Cut Supply Lines', 'secret', 1, 'secret_18.jpg', 0),
+    ('secret_19', 'Control The Region', 'secret', 1, 'secret_19.jpg', 0),
+    ('secret_20', 'Become The Gatekeeper', 'secret', 1, 'secret_20.jpg', 0),
+    ('agenda_01', 'The Crown Of Emphidia', 'agenda', 1, 'agenda_01.jpg', 1),
+    ('agenda_02', 'Shard Of The Throne', 'agenda', 1, 'agenda_02.jpg', 1),
+    ('agenda_03', 'Seed An Empire', 'agenda', 1, 'agenda_03.jpg', 1),
+    ('agenda_04', 'Holy Planet Of Ixth', 'agenda', 1, 'agenda_04.jpg', 1),
+    ('agenda_05_a', 'Mutiny (For)', 'agenda', 1, 'agenda_05_a.jpg', 0),
+    ('agenda_05_b', 'Mutiny (Against)', 'agenda', -1, 'agenda_05_b.jpg', 0),
+    ('promissory_black', 'Support The Throne (Black)', 'promissory', 1, 'promissory_black.jpg', 1),
+    ('promissory_blue', 'Support The Throne (Blue)', 'promissory', 1, 'promissory_blue.jpg', 1),
+    ('promissory_green', 'Support The Throne (Green)', 'promissory', 1, 'promissory_green.jpg', 1),
+    ('promissory_purple', 'Support The Throne (Purple)', 'promissory', 1, 'promissory_purple.jpg', 1),
+    ('promissory_red', 'Support The Throne (Red)', 'promissory', 1, 'promissory_red.jpg', 1),
+    ('promissory_yellow', 'Support The Throne (Yellow)', 'promissory', 1, 'promissory_yellow.jpg', 1);
+
+listObjectiveByObjectiveTypeId:
+SELECT *
+FROM objective
+WHERE objective_type_id = :objectiveTypeId;

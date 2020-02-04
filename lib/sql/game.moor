@@ -1,0 +1,22 @@
+CREATE TABLE game(
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL
+) AS Game;
+
+listGame:
+SELECT game.*
+FROM game
+ORDER BY game.name;
+
+readGame:
+SELECT game.*
+FROM game
+WHERE game.id = :gameId;
+
+createGame:
+INSERT INTO game
+VALUES (:id, :name);
+
+deleteGame:
+DELETE FROM game
+WHERE game.id = :gameId;

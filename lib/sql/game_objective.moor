@@ -1,0 +1,92 @@
+import 'game.moor';
+import 'objective.moor';
+import 'objective_type.moor';
+
+CREATE TABLE game_objective(
+    id TEXT NOT NULL PRIMARY KEY,
+    game_id TEXT NOT NULL REFERENCES game(id),
+    position INT NOT NULL,
+    objective_type_id TEXT NOT NULL REFERENCES objective_type(id),
+    objective_id TEXT REFERENCES objective(id)
+) AS GameObjective;
+
+listGameObjective:
+SELECT
+    game_objective.*,
+    objective_type.image AS objective_type_image,
+    objective.name AS objective_name,
+    objective.value AS objective_value,
+    objective.image AS objective_image,
+    objective.toggle AS objective_toggle
+FROM game_objective
+INNER JOIN objective_type
+    ON objective_type.id = game_objective.objective_type_id
+LEFT JOIN objective
+    ON objective.id = game_objective.objective_id
+WHERE game_objective.game_id = :gameId
+ORDER BY game_objective.position;
+
+listUnrevealedGameObjectiveByObjectiveTypeId:
+SELECT objective.*
+FROM objective
+WHERE objective.id NOT IN (
+    SELECT game_objective.objective_id
+    FROM game_objective
+    WHERE game_objective.game_id = :gameId
+    AND game_objective.objective_id IS NOT NULL
+)
+AND objective.objective_type_id = :objectiveTypeId;
+
+revealGameObjective:
+UPDATE game_objective
+SET
+    objective_id = (
+        SELECT objective.id
+        FROM objective
+        WHERE objective.id NOT IN (
+            SELECT game_objective.objective_id
+            FROM game_objective
+            WHERE game_objective.game_id = :gameId
+            AND game_objective.objective_id IS NOT NULL
+        )
+        AND objective.objective_type_id = game_objective.objective_type_id
+        ORDER BY RANDOM()
+        LIMIT 1
+    )
+WHERE game_objective.id = :gameObjectiveId;
+
+hideGameObjective:
+UPDATE game_objective
+SET
+    objective_id = null
+WHERE game_objective.id = :gameObjectiveId;
+
+randomGameObjective(:gameId AS TEXT, :objectiveTypeId AS TEXT):
+SELECT objective.*
+FROM objective
+WHERE objective.id NOT IN (
+    SELECT game_objective.objective_id
+    FROM game_objective
+    WHERE game_objective.game_id = :gameId
+)
+AND objective.objective_type_id = :objectiveTypeId
+ORDER BY RANDOM()
+LIMIT 1;
+
+updateGameObjectivePosition:
+UPDATE game_objective
+SET
+    position = :position
+WHERE game_objective.id = :gameObjectiveId;
+
+addGameObjective:
+REPLACE INTO game_objective
+VALUES(:id, :gameId, :position, :objectiveTypeId, :objectiveId);
+
+removeGameObjective:
+DELETE FROM game_objective
+WHERE id = :gameObjectiveId;
+
+removeGameObjectiveByGameId:
+DELETE FROM game_objective
+WHERE game_id = :gameId;

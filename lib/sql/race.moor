@@ -1,0 +1,30 @@
+CREATE TABLE race(
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    image TEXT NOT NULL
+) AS Race;
+
+@create:
+INSERT INTO race
+VALUES
+    ('race_arborec', 'The Arborec', 'race_arborec.png'),
+    ('race_creuss', 'The Ghosts of Creuss', 'race_creuss.png'),
+    ('race_hacan', 'The Emirates of Hacan', 'race_hacan.png'),
+    ('race_jolnar', 'The Universities of Jol-Nar', 'race_jolnar.png'),
+    ('race_l1z1x', 'The L1z1x Mindnet', 'race_l1z1x.png'),
+    ('race_letnev', 'The Barony of Letnev', 'race_letnev.png'),
+    ('race_mentak', 'The Mentak Coalition', 'race_mentak.png'),
+    ('race_muaat', 'The Embers of Muaat', 'race_muaat.png'),
+    ('race_naalu', 'The Naalu Collective', 'race_naalu.png'),
+    ('race_nekro', 'The Nekro Virus', 'race_nekro.png'),
+    ('race_saar', 'The Clan of Saar', 'race_saar.png'),
+    ('race_sardakk', 'The Sardakk N’orr', 'race_sardakk.png'),
+    ('race_sol', 'The Federation of Sol', 'race_sol.png'),
+    ('race_winnu', 'The Winnu', 'race_winnu.png'),
+    ('race_xxcha', 'The Xxcha Kingdom', 'race_xxcha.png'),
+    ('race_yin', 'The Brotherhood of Yin', 'race_yin.png'),
+    ('race_yssaril', 'The Yssaril Tribes', 'race_yssaril.png');
+
+listRace:
+SELECT *
+FROM race;

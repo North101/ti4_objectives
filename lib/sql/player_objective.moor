@@ -1,0 +1,133 @@
+import 'player.moor';
+import 'objective.moor';
+import 'player_objective.moor';
+import 'game_objective.moor';
+
+CREATE TABLE player_objective(
+    player_id TEXT NOT NULL REFERENCES player(id),
+    objective_id TEXT NOT NULL REFERENCES objective(id),
+    PRIMARY KEY (player_id, objective_id)
+) AS PlayerObjective;
+
+listAvailablePlayerObjective:
+SELECT objective.id
+FROM player
+INNER JOIN objective
+    ON objective.id NOT IN (
+        SELECT game_objective.objective_id
+        FROM game_objective
+        WHERE game_objective.game_id = player.game_id
+        AND game_objective.objective_id IS NOT NULL
+    )
+    AND objective.id NOT IN (
+        SELECT player_objective.objective_id
+        FROM player AS other_player
+        INNER JOIN player_objective
+            ON player_objective.player_id = other_player.id
+        WHERE other_player.game_id = player.game_id
+    )
+WHERE player.id = :playerId;
+
+listPlayerObjectiveByGameId:
+SELECT
+    game_objective.id,
+    game_objective.objective_id,
+    objective.toggle,
+    player.id AS player_id,
+    race.image AS race_image,
+    EXISTS(
+        SELECT 1
+        FROM player_objective
+        WHERE objective_id = game_objective.objective_id
+        AND player_id = player.id
+    ) AS done
+FROM game_objective
+INNER JOIN player
+    ON player.game_id = game_objective.game_id
+INNER JOIN race
+    ON race.id = player.race_id
+LEFT JOIN objective
+    ON objective.id = game_objective.objective_id
+WHERE game_objective.game_id = :gameId;
+
+listPlayerObjectiveByPlayerId:
+SELECT
+    objective.id AS objective_id,
+    objective_type.id AS objective_type_id,
+    objective_type.image AS objective_type_image,
+    objective.name AS objective_name,
+    objective.value AS objective_value,
+    objective.image AS objective_image,
+    objective.toggle AS objective_toggle
+FROM player
+INNER JOIN player_objective
+    ON player_objective.player_id = player.id
+INNER JOIN objective
+    ON objective.id = player_objective.objective_id
+INNER JOIN objective_type
+    ON objective_type.id = objective.objective_type_id
+INNER JOIN race
+    ON race.id = player.race_id
+WHERE player.id = :playerId
+AND objective.id NOT IN (
+    SELECT objective_id
+    FROM game_objective
+    WHERE objective_id = game_objective.objective_id
+    AND game_id = player.game_id
+);
+
+listPlayerScoreByGameId:
+SELECT
+    player.*,
+    race.name AS race_name,
+    race.image AS race_image,
+    player_objective.value AS score
+FROM player
+INNER JOIN race
+    ON race.id = player.race_id
+INNER JOIN (
+    SELECT player.id, COALESCE(SUM(objective.value), 0) AS value
+    FROM player
+    LEFT JOIN player_objective
+        ON player_objective.player_id = player.id
+    LEFT JOIN objective
+        ON objective.id = player_objective.objective_id
+    GROUP BY player.id
+) AS player_objective
+    ON player_objective.id = player.id
+WHERE player.game_id = :gameId
+ORDER BY player_objective.value, race.name;
+
+readPlayerScore:
+SELECT
+    player.*,
+    race.name AS race_name,
+    race.image AS race_image,
+    player_objective.value AS score
+FROM player
+INNER JOIN race
+    ON race.id = player.race_id
+INNER JOIN (
+    SELECT player.id, COALESCE(SUM(objective.value), 0) AS value
+    FROM player
+    LEFT JOIN player_objective
+        ON player_objective.player_id = player.id
+    LEFT JOIN objective
+        ON objective.id = player_objective.objective_id
+    GROUP BY player.id
+) AS player_objective
+    ON player_objective.id = player.id
+WHERE player.id = :playerId;
+
+addPlayerObjective:
+REPLACE INTO player_objective
+VALUES(:playerId, :objectiveId);
+
+removePlayerObjective:
+DELETE FROM player_objective
+WHERE player_objective.player_id = :playerId
+AND player_objective.objective_id = :objectiveId;
+
+removePlayerObjectiveByObjectiveId:
+DELETE FROM player_objective
+WHERE player_objective.objective_id = :objectiveId;

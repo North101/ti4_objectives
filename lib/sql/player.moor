@@ -1,0 +1,23 @@
+import 'race.moor';
+import 'game.moor';
+
+CREATE TABLE player(
+    id TEXT PRIMARY KEY,
+    game_id TEXT NOT NULL REFERENCES game(id),
+    race_id TEXT NOT NULL REFERENCES race(id),
+    name TEXT NOT NULL
+) AS Player;
+
+listPlayerByGameId:
+SELECT
+    player.*,
+    race.name AS race_name,
+    race.image AS race_image
+FROM player
+INNER JOIN race
+    ON race.id = player.race_id
+WHERE player.game_id = :gameId;
+
+createPlayer:
+INSERT INTO player
+VALUES(:id, :gameId, :raceId, :name);
