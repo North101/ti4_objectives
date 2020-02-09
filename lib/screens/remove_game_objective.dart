@@ -32,10 +32,10 @@ class RemoveGameObjectiveDialog extends StatelessWidget {
           child: Text('Remove'),
           onPressed: () async {
             await db.transaction(() async {
-              await db.removePlayerObjectiveByObjectiveId(gameObjective.id);
+              await db.removePlayerObjectiveByObjectiveId(gameObjective.objectiveId);
 
               await db.removeGameObjective(gameObjective.id);
-              final gameObjectiveList = await db.listGameObjective(gameObjective.gameId).get();
+              final gameObjectiveList = await db.listGameObjectiveByGameId(gameObjective.gameId).get();
               for (final gameObjective in gameObjectiveList.asMap().entries) {
                 await db.updateGameObjectivePosition(gameObjective.key, gameObjective.value.id);
               }

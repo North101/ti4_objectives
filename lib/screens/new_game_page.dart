@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:ti4_objectives/database.dart';
-import 'package:ti4_objectives/page/game_page.dart';
-import 'package:ti4_objectives/page/new_player_dialog.dart';
+import 'package:ti4_objectives/screens/game_page.dart';
+import 'package:ti4_objectives/screens/new_player_dialog.dart';
 import 'package:uuid/uuid.dart';
 
 class PlayerValue {
+  final String id;
   final String name;
   final Race race;
 
-  PlayerValue(this.name, this.race);
+  PlayerValue(this.id, this.name, this.race);
 }
 
 class NewGameStep1Page extends StatefulWidget {
@@ -82,6 +83,51 @@ class _NewGameStep1PageState extends State<NewGameStep1Page> {
   }
 }
 
+class ListModel<E> {
+  ListModel({
+    @required this.listKey,
+    @required this.removedItemBuilder,
+    Iterable<E> initialItems,
+  })  : assert(listKey != null),
+        assert(removedItemBuilder != null),
+        _items = List<E>.from(initialItems ?? <E>[]);
+
+  final GlobalKey<SliverAnimatedListState> listKey;
+  final Widget Function(BuildContext context, E removedItem, Animation<double> animation) removedItemBuilder;
+  final List<E> _items;
+
+  SliverAnimatedListState get _animatedList => listKey.currentState;
+
+  void add(E item) {
+    insert(length, item);
+  }
+
+  void insert(int index, E item) {
+    _items.insert(index, item);
+    _animatedList.insertItem(index);
+  }
+
+  void move(int oldIndex, int newIndex) {
+    insert(newIndex, removeAt(oldIndex));
+  }
+
+  E removeAt(int index) {
+    final removedItem = _items.removeAt(index);
+    if (removedItem != null) {
+      _animatedList.removeItem(index, (BuildContext context, Animation<double> animation) {
+        return removedItemBuilder(context, removedItem, animation);
+      });
+    }
+    return removedItem;
+  }
+
+  int get length => _items.length;
+
+  E operator [](int index) => _items[index];
+
+  int indexOf(E item) => _items.indexOf(item);
+}
+
 class NewGameStep2Page extends StatefulWidget {
   final String name;
   final List<PlayerValue> playerList;
@@ -93,15 +139,44 @@ class NewGameStep2Page extends StatefulWidget {
 }
 
 class _NewGameStep2PageState extends State<NewGameStep2Page> {
-  final List<PlayerValue> _playerList = [];
+  final GlobalKey<SliverAnimatedListState> _listKey = GlobalKey<SliverAnimatedListState>();
+  ListModel<PlayerValue> _playerList;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.playerList != null) {
-      _playerList.addAll(widget.playerList);
-    }
+    _playerList = ListModel(
+      listKey: _listKey,
+      initialItems: widget.playerList,
+      removedItemBuilder: _buildRemovedItem,
+    );
+  }
+
+  Widget buildItem(BuildContext context, int index, PlayerValue item, Animation<double> animation) {
+    return SizeTransition(
+      axis: Axis.vertical,
+      sizeFactor: animation,
+      child: ListTile(
+        leading: Image.asset('assets/${item.race.image}', height: 24, width: 24),
+        title: Text(item.name),
+        subtitle: Text(item.race.name),
+        trailing: IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: index != null
+              ? () {
+                  setState(() {
+                    _playerList.removeAt(index);
+                  });
+                }
+              : null,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRemovedItem(BuildContext context, PlayerValue item, Animation<double> animation) {
+    return buildItem(context, null, item, animation);
   }
 
   @override
@@ -109,25 +184,16 @@ class _NewGameStep2PageState extends State<NewGameStep2Page> {
     return Scaffold(
       appBar: AppBar(title: Text('Add Players')),
       body: Step(
-        child: ListView.builder(
-          itemCount: _playerList.length,
-          itemBuilder: (context, index) {
-            final item = _playerList[index];
-            return ListTile(
-              leading: Image.asset('assets/${item.race.image}', height: 24, width: 24),
-              title: Text(item.name),
-              subtitle: Text(item.race.name),
-              trailing: IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  setState(() {
-                    _playerList.removeAt(index);
-                  });
-                },
-              ),
-            );
-          },
-        ),
+        child: CustomScrollView(slivers: [
+          SliverAnimatedList(
+            key: _listKey,
+            initialItemCount: _playerList.length,
+            itemBuilder: (BuildContext context, int index, Animation<double> animation) {
+              final item = _playerList[index];
+              return buildItem(context, index, item, animation);
+            },
+          ),
+        ]),
         backChild: FlatButton(
           child: Text('Back'),
           onPressed: () {
@@ -144,9 +210,9 @@ class _NewGameStep2PageState extends State<NewGameStep2Page> {
 
             final gameId = Uuid().v4();
             await db.transaction<void>(() async {
-              await db.createGame(gameId, widget.name);
-              for (final player in _playerList) {
-                await db.createPlayer(Uuid().v4(), gameId, player.race.id, player.name);
+              await db.createGame(gameId, widget.name, true);
+              for (final player in _playerList._items) {
+                await db.createPlayer(player.id, gameId, player.race.id, player.name);
               }
               for (var i = 0; i < 5; i++) {
                 await db.addGameObjective(Uuid().v4(), gameId, i, 'phase_1', null);
@@ -156,8 +222,8 @@ class _NewGameStep2PageState extends State<NewGameStep2Page> {
               }
             });
 
-            await Navigator.pushAndRemoveUntil(context, MaterialPageRoute<GamePage>(builder: (context) {
-              return GamePage(gameId: gameId);
+            await Navigator.pushAndRemoveUntil(context, MaterialPageRoute<GameServerPage>(builder: (context) {
+              return GameServerPage(gameId: gameId);
             }), (route) {
               return route.isFirst;
             });
@@ -171,7 +237,7 @@ class _NewGameStep2PageState extends State<NewGameStep2Page> {
             final playerResult = await showDialog<PlayerValue>(
               context: context,
               builder: (context) {
-                final raceIds = _playerList.map((player) => player.race.id);
+                final raceIds = _playerList._items.map((player) => player.race.id);
                 return NewPlayerDialog(filterRaceItems: (race) {
                   return !raceIds.contains(race.id);
                 });

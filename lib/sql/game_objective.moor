@@ -10,7 +10,12 @@ CREATE TABLE game_objective(
     objective_id TEXT REFERENCES objective(id)
 ) AS GameObjective;
 
-listGameObjective:
+listRawGameObjectiveByGameId:
+SELECT game_objective.*
+FROM game_objective
+WHERE game_objective.game_id = :gameId;
+
+listGameObjectiveByGameId:
 SELECT
     game_objective.*,
     objective_type.image AS objective_type_image,

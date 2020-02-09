@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "protos/game_objective.proto";
+import "protos/game.proto";
+import "protos/objective_type.proto";
+import "protos/objective.proto";
+import "protos/player_objective.proto";
+import "protos/player.proto";
+import "protos/race.proto";
+
+message GameStateRequest {
+  uint32 version = 1;
+}
+
+message GameStateResponse {
+  uint32 version = 1;
+  bool resync = 2;
+  repeated ObjectiveTypeResponse objective_type_map = 3;
+  repeated ObjectiveResponse objective_map = 4;
+  repeated RaceResponse race_map = 5;
+
+  GameResponse game = 6;
+  repeated GameObjectiveResponse game_objective_map = 7;
+  repeated PlayerResponse player_map = 8;
+  repeated PlayerObjectiveResponse player_objective_map = 9;
+}
+
+service GameStateService {
+  rpc RequestGameState(GameStateRequest) returns (stream GameStateResponse) {}
+}

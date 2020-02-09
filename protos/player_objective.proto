@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "protos/action.proto";
+
+message PlayerObjectiveResponse {
+  Action action = 1;
+  string player_id = 2;
+  string objective_id = 3;
+}

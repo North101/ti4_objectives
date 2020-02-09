@@ -1,6 +1,7 @@
 CREATE TABLE game(
     id TEXT PRIMARY KEY,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    local BOOLEAN NOT NULL
 ) AS Game;
 
 listGame:
@@ -14,8 +15,8 @@ FROM game
 WHERE game.id = :gameId;
 
 createGame:
-INSERT INTO game
-VALUES (:id, :name);
+REPLACE INTO game
+VALUES (:id, :name, :local);
 
 deleteGame:
 DELETE FROM game

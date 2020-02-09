@@ -37,7 +37,7 @@ packages:
     source: hosted
     version: "1.5.2"
   async:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: async
       url: "https://pub.dartlang.org"
@@ -162,6 +162,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.3"
+  ffi:
+    dependency: transitive
+    description:
+      name: ffi
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.3"
   fixnum:
     dependency: transitive
     description:
@@ -188,6 +195,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  googleapis_auth:
+    dependency: transitive
+    description:
+      name: googleapis_auth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.11+1"
   graphs:
     dependency: transitive
     description:
@@ -195,6 +209,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  grpc:
+    dependency: "direct main"
+    description:
+      path: "../grpc-dart"
+      relative: true
+    source: path
+    version: "2.1.3"
   html:
     dependency: transitive
     description:
@@ -209,6 +230,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.0+4"
+  http2:
+    dependency: transitive
+    description:
+      name: http2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -277,25 +305,25 @@ packages:
     description:
       path: moor
       ref: develop
-      resolved-ref: f9424470a58b47525e8d51a758d1127e54f0d0f5
+      resolved-ref: aa52c4ba3d7567a5d62b0d270616e9bb1fbdca08
       url: "git@github.com:simolus3/moor.git"
     source: git
     version: "2.3.0"
-  moor_flutter:
+  moor_ffi:
     dependency: "direct main"
     description:
-      path: moor_flutter
+      path: moor_ffi
       ref: develop
-      resolved-ref: f9424470a58b47525e8d51a758d1127e54f0d0f5
+      resolved-ref: aa52c4ba3d7567a5d62b0d270616e9bb1fbdca08
       url: "git@github.com:simolus3/moor.git"
     source: git
-    version: "2.0.0"
+    version: "0.4.0"
   moor_generator:
     dependency: "direct dev"
     description:
       path: moor_generator
       ref: develop
-      resolved-ref: f9424470a58b47525e8d51a758d1127e54f0d0f5
+      resolved-ref: aa52c4ba3d7567a5d62b0d270616e9bb1fbdca08
       url: "git@github.com:simolus3/moor.git"
     source: git
     version: "2.4.0-dev"
@@ -341,6 +369,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.4"
+  path_provider:
+    dependency: "direct main"
+    description:
+      name: path_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.0"
   pedantic:
     dependency: transitive
     description:
@@ -348,6 +383,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.0"
+  platform:
+    dependency: transitive
+    description:
+      name: platform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
   pool:
     dependency: transitive
     description:
@@ -355,6 +397,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
+  protobuf:
+    dependency: "direct main"
+    description:
+      name: protobuf
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   provider:
     dependency: "direct main"
     description:
@@ -425,6 +474,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sliver_animated_list:
+    dependency: "direct main"
+    description:
+      name: sliver_animated_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+2"
   source_gen:
     dependency: transitive
     description:
@@ -439,19 +495,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.0"
-  sqflite:
-    dependency: transitive
-    description:
-      name: sqflite
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.0"
   sqlparser:
     dependency: "direct overridden"
     description:
       path: sqlparser
       ref: develop
-      resolved-ref: f9424470a58b47525e8d51a758d1127e54f0d0f5
+      resolved-ref: aa52c4ba3d7567a5d62b0d270616e9bb1fbdca08
       url: "git@github.com:simolus3/moor.git"
     source: git
     version: "0.6.0"

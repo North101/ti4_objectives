@@ -65,7 +65,19 @@ VALUES
     ('promissory_red', 'Support The Throne (Red)', 'promissory', 1, 'promissory_red.jpg', 1),
     ('promissory_yellow', 'Support The Throne (Yellow)', 'promissory', 1, 'promissory_yellow.jpg', 1);
 
+listObjective:
+SELECT *
+FROM objective;
+
 listObjectiveByObjectiveTypeId:
 SELECT *
 FROM objective
 WHERE objective_type_id = :objectiveTypeId;
+
+createObjective:
+REPLACE INTO objective
+VALUES (:id, :name, :objective_type_id, :value, :image, :toggle);
+
+deleteObjective:
+DELETE FROM objective
+WHERE id = :objectiveId;

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "protos/action.proto";
+
+message ObjectiveResponse {
+  Action action = 1;
+  string id = 2;
+  string name = 3;
+  string objective_type_id = 4;
+  int32 value = 5;
+  string image = 6;
+  bool toggle = 7;
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ti4_objectives/database.dart' hide Player;
-import 'package:ti4_objectives/page/new_game_page.dart';
+import 'package:ti4_objectives/screens/new_game_page.dart';
+import 'package:uuid/uuid.dart';
 
 class NewPlayerDialog extends StatefulWidget {
   final bool Function(Race race) filterRaceItems;
@@ -84,7 +85,14 @@ class _NewPlayerDialogState extends State<NewPlayerDialog> {
           onPressed: hasError()
               ? null
               : () {
-                  Navigator.pop(context, PlayerValue(_nameController.text, _selectedRace));
+                  Navigator.pop(
+                    context,
+                    PlayerValue(
+                      Uuid().v4(),
+                      _nameController.text,
+                      _selectedRace,
+                    ),
+                  );
                 },
         ),
       ],

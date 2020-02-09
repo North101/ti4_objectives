@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "protos/action.proto";
+
+message ObjectiveTypeResponse {
+  Action action = 1;
+  string id = 2;
+  string name = 3;
+  string image = 4;
+  bool private = 5;
+}

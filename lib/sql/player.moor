@@ -8,6 +8,11 @@ CREATE TABLE player(
     name TEXT NOT NULL
 ) AS Player;
 
+listRawPlayerByGameId:
+SELECT player.*
+FROM player
+WHERE player.game_id = :gameId;
+
 listPlayerByGameId:
 SELECT
     player.*,
@@ -19,5 +24,13 @@ INNER JOIN race
 WHERE player.game_id = :gameId;
 
 createPlayer:
-INSERT INTO player
+REPLACE INTO player
 VALUES(:id, :gameId, :raceId, :name);
+
+deletePlayerById:
+DELETE FROM player
+WHERE player.id = :playerId;
+
+deletePlayerByGameId:
+DELETE FROM player
+WHERE game_id = :gameId;

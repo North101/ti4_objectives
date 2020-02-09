@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "protos/action.proto";
+
+message PlayerResponse {
+  Action action = 1;
+  string id = 2;
+  string game_id = 3;
+  string race_id = 4;
+  string name = 5;
+}

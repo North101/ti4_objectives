@@ -9,6 +9,13 @@ CREATE TABLE player_objective(
     PRIMARY KEY (player_id, objective_id)
 ) AS PlayerObjective;
 
+listRawPlayerObjectiveByGameId:
+SELECT player_objective.*
+FROM player_objective
+INNER JOIN player
+    ON player.id = player_objective.player_id
+WHERE player.game_id = :gameId;
+
 listAvailablePlayerObjective:
 SELECT objective.id
 FROM player
@@ -28,7 +35,7 @@ INNER JOIN objective
     )
 WHERE player.id = :playerId;
 
-listPlayerObjectiveByGameId:
+listGameObjectiveResultsByGameId:
 SELECT
     game_objective.id,
     game_objective.objective_id,
@@ -131,3 +138,11 @@ AND player_objective.objective_id = :objectiveId;
 removePlayerObjectiveByObjectiveId:
 DELETE FROM player_objective
 WHERE player_objective.objective_id = :objectiveId;
+
+removePlayerObjectiveByGameId:
+DELETE FROM player_objective
+WHERE player_objective.player_id IN (
+    SELECT player.id
+    FROM player
+    WHERE player.game_id = :gameId
+);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ti4_objectives/database.dart';
-import 'package:ti4_objectives/page/game_list_page.dart';
+import 'package:ti4_objectives/screens/game_list_page.dart';
 
 const OBJECTIVE_IMAGE_HEIGHT = 752 * 0.34;
 const OBJECTIVE_IMAGE_WIDTH = 499 * 0.34;
@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: GameListPage(),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
